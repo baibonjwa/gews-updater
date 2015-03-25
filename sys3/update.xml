@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <item>
-  <title>工作面瓦斯涌出动态特征管理系统 0.1.0 更新可用</title> 
-  <version>0.1.0</version> 
-  <url>http://bltmld.vicp.cc/sys3/setup/gews_sys3_v0.1.exe</url> 
-  <changelog>http://rbsoft.org/downloads/file/1-right-click-enhancer?tmpl=component</changelog> 
+  <title>工作面地质测量管理系统 0.1.1 更新可用</title> 
+  <version>0.1.1</version> 
+  <url>http://bltmld.vicp.cc:8090/sys3/v0.1/setup/gews_sys3_v0.1.exe</url> 
+  <changelog>http://bltmld.vicp.cc/changelog.html</changelog> 
 </item>

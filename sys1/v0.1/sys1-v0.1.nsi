@@ -145,6 +145,7 @@ Section "工作面瓦斯涌出动态特征管理系统" SEC01
   SetOutPath "$INSTDIR\es"
   File "C:\gews\sys1\bin\Debug\es\Castle.Components.Validator.resources.dll"
   SetOutPath "$INSTDIR"
+  File "C:\gews\sys2\bin\Debug\AutoUpdater.NET.dll"
   File "C:\gews\sys1\bin\Debug\ESRI.ServerStyle"
   File "C:\gews\sys1\bin\Debug\ESRI.style"
   File "C:\gews\sys1\bin\Debug\FarPoint.Win.dll"
