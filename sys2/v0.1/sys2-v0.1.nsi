@@ -6,7 +6,7 @@
 !define PRODUCT_PUBLISHER "煤科集团沈阳研究院有限公司"
 !define PRODUCT_WEB_SITE "http://www.syccri.com"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\gacutil.exe"
-!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+!define PRODUCT_UNINST_KEY "Software\Syccri\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 !define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
 
@@ -122,7 +122,7 @@ var ICONS_GROUP
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "gews_sys2_v0.1.exe"
 InstallDir "$PROGRAMFILES\Gews\sys2"
-InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
+InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" "sys2"
 ShowInstDetails show
 ShowUnInstDetails show
 
@@ -164,6 +164,7 @@ Section "工作面采掘进度管理系统" SEC01
   File "C:\gews\sys2\bin\Debug\es\DevExpress.XtraBars.v14.1.resources.dll"
   File "C:\gews\sys2\bin\Debug\es\DevExpress.XtraEditors.v14.1.resources.dll"
   SetOutPath "$INSTDIR"
+  File "C:\gews\sys2\bin\Debug\AutoUpdater.NET.dll"
   File "C:\gews\sys2\bin\Debug\ESRI.ArcGIS.3DAnalyst.dll"
   File "C:\gews\sys2\bin\Debug\ESRI.ArcGIS.ADF.Local.dll"
   File "C:\gews\sys2\bin\Debug\ESRI.ArcGIS.AxControls.dll"

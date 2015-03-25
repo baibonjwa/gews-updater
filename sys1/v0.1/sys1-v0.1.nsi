@@ -122,7 +122,7 @@ var ICONS_GROUP
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "gews_sys1_v0.1.exe"
 InstallDir "$PROGRAMFILES\Gews\sys1"
-InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
+InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" "sys1"
 ShowInstDetails show
 ShowUnInstDetails show
 
