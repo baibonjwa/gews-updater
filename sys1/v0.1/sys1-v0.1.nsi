@@ -21,6 +21,7 @@
 ; nsDialogs
 !include LogicLib.nsh
 !include nsDialogs.nsh
+!include FileFunc.nsh
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
@@ -45,6 +46,9 @@ Var serverIp
 Var dbInstance
 Var dbName
 Var gisDbName
+
+Var fileMxdPath
+Var mxdPath
 
 Page custom nsDialogsPage nsDialogsPageLeave
 
@@ -99,6 +103,49 @@ Function nsDialogsPageLeave
   
 FunctionEnd
 
+;select the default.mxd files
+Page Custom MyPageCreate MyPageLeave
+
+Function MyPageLeave
+  ${NSD_GetText} $fileMxdPath $0
+  ${GetFileName} $0 $1
+  ${IfNot} ${FileExists} $0
+  ${OrIf} $1 != "default.mxd"
+      MessageBox mb_iconstop "您必须选择地图文件，才能继续进行安装"
+      Abort
+  ${Else}
+      StrCpy $mxdPath $0
+      #php path is in $0, do something with it...
+  ${EndIf}
+FunctionEnd
+
+Function MyPageComDlgSelectPHP
+  Pop $0
+  ${NSD_GetText} $fileMxdPath $0
+  nsDialogs::SelectFileDialog open $0 "default.mxd|default.mxd"
+  Pop $0
+  ${If} $0 != ""
+      ${NSD_SetText} $fileMxdPath $0
+  ${EndIf}
+FunctionEnd
+
+Function MyPageCreate
+  nsDialogs::Create 1018
+  Pop $0
+
+  ${NSD_CreateLabel} 0 0 100% 12u "地图文件"
+
+  ${NSD_CreateText} 0 13u -25u 13u ""
+  Pop $fileMxdPath
+
+  ${NSD_CreateBrowseButton} -23u 12u 20u 15u "..."
+  Pop $0
+  ${NSD_OnClick} $0 MyPageComDlgSelectPHP
+
+  nsDialogs::Show
+FunctionEnd
+
+
 ; Start menu page
 var ICONS_GROUP
 !define MUI_STARTMENUPAGE_NODISABLE
@@ -127,6 +174,7 @@ ShowInstDetails show
 ShowUnInstDetails show
 
 Section "工作面瓦斯涌出动态特征管理系统" SEC01
+
   File "C:\gews\sys1\bin\Debug\Antlr3.Runtime.dll"
   File "C:\gews\sys1\bin\Debug\ARConfig.xml"
   File "C:\gews\sys1\bin\Debug\Castle.ActiveRecord.dll"
@@ -140,8 +188,8 @@ Section "工作面瓦斯涌出动态特征管理系统" SEC01
   File "C:\gews\sys1\bin\Debug\Castle.Core.xml"
   File "C:\gews\sys1\bin\Debug\Config.ini"
   File "C:\gews\sys1\bin\Debug\ConfigDatabaseGIS.ini"
-  File "C:\gews\sys1\bin\Debug\default.mxd"
   File "C:\gews\sys1\bin\Debug\DefaultUser"
+  
   SetOutPath "$INSTDIR\es"
   File "C:\gews\sys1\bin\Debug\es\Castle.Components.Validator.resources.dll"
   SetOutPath "$INSTDIR"
@@ -260,7 +308,8 @@ Section "工作面瓦斯涌出动态特征管理系统" SEC01
   File "C:\gews\sys1\bin\Debug\系统一关于图片.jpg"
   File "C:\gews\sys1\bin\Debug\综合柱状图.mxd"
 
-
+  ;copy the default.mxd file
+  CopyFiles $mxdPath $INSTDIR
   ;write config.ini
   FileOpen $4 "$INSTDIR\Config.ini" w
   FileWrite $4 "[DataBase]"
