@@ -15,6 +15,7 @@
 ; nsDialogs
 !include LogicLib.nsh
 !include nsDialogs.nsh
+!include FileFunc.nsh
 
 ; MUI Settings
 !define MUI_ABORTWARNING
@@ -44,6 +45,10 @@ Var serverIp
 Var dbInstance
 Var dbName
 Var gisDbName
+
+Var fileMxdPath
+Var mxdPath
+
 
 Page custom nsDialogsPage nsDialogsPageLeave
 
@@ -99,6 +104,49 @@ Function nsDialogsPageLeave
 FunctionEnd
 
 
+
+;select the default.mxd files
+Page Custom MyPageCreate MyPageLeave
+
+Function MyPageLeave
+  ${NSD_GetText} $fileMxdPath $0
+  ${GetFileName} $0 $1
+  ${IfNot} ${FileExists} $0
+  ${OrIf} $1 != "default.mxd"
+      MessageBox mb_iconstop "您必须选择地图文件，才能继续进行安装"
+      Abort
+  ${Else}
+      StrCpy $mxdPath $0
+      #php path is in $0, do something with it...
+  ${EndIf}
+FunctionEnd
+
+Function MyPageComDlgSelectPHP
+  Pop $0
+  ${NSD_GetText} $fileMxdPath $0
+  nsDialogs::SelectFileDialog open $0 "default.mxd|default.mxd"
+  Pop $0
+  ${If} $0 != ""
+      ${NSD_SetText} $fileMxdPath $0
+  ${EndIf}
+FunctionEnd
+
+Function MyPageCreate
+  nsDialogs::Create 1018
+  Pop $0
+
+  ${NSD_CreateLabel} 0 0 100% 12u "地图文件"
+
+  ${NSD_CreateText} 0 13u -25u 13u ""
+  Pop $fileMxdPath
+
+  ${NSD_CreateBrowseButton} -23u 12u 20u 15u "..."
+  Pop $0
+  ${NSD_OnClick} $0 MyPageComDlgSelectPHP
+
+  nsDialogs::Show
+FunctionEnd
+
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
@@ -153,7 +201,6 @@ Section "工作面动态防突管理系统" SEC01
   File "C:\gews\sys4\bin\Debug\de\DevExpress.XtraNavBar.v14.1.resources.dll"
   File "C:\gews\sys4\bin\Debug\de\DevExpress.XtraScheduler.v14.1.Core.resources.dll"
   SetOutPath "$INSTDIR"
-  File "C:\gews\sys4\bin\Debug\default.mxd"
   File "C:\gews\sys4\bin\Debug\DefaultUser"
   File "C:\gews\sys4\bin\Debug\DevExpress.BonusSkins.v14.1.dll"
   File "C:\gews\sys4\bin\Debug\DevExpress.Data.v14.1.dll"
@@ -335,7 +382,8 @@ Section "工作面动态防突管理系统" SEC01
   File "C:\gews\sys4\bin\Debug\系统四关于图片.jpg"
   File "C:\gews\sys4\bin\Debug\综合柱状图.mxd"
   
-  
+  ;copy the default.mxd file
+  CopyFiles $mxdPath $INSTDIR
   ;write config.ini
   FileOpen $4 "$INSTDIR\Config.ini" w
   FileWrite $4 "[DataBase]"

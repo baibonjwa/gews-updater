@@ -194,7 +194,6 @@ Section "工作面采掘进度管理系统" SEC01
   File "C:\gews\sys2\bin\Debug\de\DevExpress.XtraBars.v14.1.resources.dll"
   File "C:\gews\sys2\bin\Debug\de\DevExpress.XtraEditors.v14.1.resources.dll"
   SetOutPath "$INSTDIR"
-  File "C:\gews\sys2\bin\Debug\default.mxd"
   File "C:\gews\sys2\bin\Debug\DefaultUser"
   File "C:\gews\sys2\bin\Debug\DevExpress.Data.v14.1.dll"
   File "C:\gews\sys2\bin\Debug\DevExpress.Data.v14.1.xml"

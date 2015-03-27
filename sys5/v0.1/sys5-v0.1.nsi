@@ -15,6 +15,7 @@
 ; nsDialogs
 !include LogicLib.nsh
 !include nsDialogs.nsh
+!include FileFunc.nsh
 
 ; MUI Settings
 !define MUI_ABORTWARNING
@@ -44,6 +45,9 @@ Var serverIp
 Var dbInstance
 Var dbName
 Var gisDbName
+
+Var fileMxdPath
+Var mxdPath
 
 Page custom nsDialogsPage nsDialogsPageLeave
 
@@ -98,7 +102,47 @@ Function nsDialogsPageLeave
 
 FunctionEnd
 
+;select the default.mxd files
+Page Custom MyPageCreate MyPageLeave
 
+Function MyPageLeave
+  ${NSD_GetText} $fileMxdPath $0
+  ${GetFileName} $0 $1
+  ${IfNot} ${FileExists} $0
+  ${OrIf} $1 != "default.mxd"
+      MessageBox mb_iconstop "您必须选择地图文件，才能继续进行安装"
+      Abort
+  ${Else}
+      StrCpy $mxdPath $0
+      #php path is in $0, do something with it...
+  ${EndIf}
+FunctionEnd
+
+Function MyPageComDlgSelectPHP
+  Pop $0
+  ${NSD_GetText} $fileMxdPath $0
+  nsDialogs::SelectFileDialog open $0 "default.mxd|default.mxd"
+  Pop $0
+  ${If} $0 != ""
+      ${NSD_SetText} $fileMxdPath $0
+  ${EndIf}
+FunctionEnd
+
+Function MyPageCreate
+  nsDialogs::Create 1018
+  Pop $0
+
+  ${NSD_CreateLabel} 0 0 100% 12u "地图文件"
+
+  ${NSD_CreateText} 0 13u -25u 13u ""
+  Pop $fileMxdPath
+
+  ${NSD_CreateBrowseButton} -23u 12u 20u 15u "..."
+  Pop $0
+  ${NSD_OnClick} $0 MyPageComDlgSelectPHP
+
+  nsDialogs::Show
+FunctionEnd
 
 
 
@@ -127,8 +171,6 @@ Section "瓦斯预警系统管理平台" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite try
   File "C:\gews\sys5\bin\Debug\Antlr3.Runtime.dll"
-  SetOutPath "$INSTDIR\app.publish"
-  File "C:\gews\sys5\bin\Debug\app.publish\sys5.exe"
   SetOutPath "$INSTDIR"
   File "C:\gews\sys5\bin\Debug\ARConfig.xml"
   File "C:\gews\sys5\bin\Debug\AutoUpdater.NET.dll"
@@ -166,7 +208,6 @@ Section "瓦斯预警系统管理平台" SEC01
   File "C:\gews\sys5\bin\Debug\de\DevExpress.XtraBars.v14.1.resources.dll"
   File "C:\gews\sys5\bin\Debug\de\DevExpress.XtraEditors.v14.1.resources.dll"
   SetOutPath "$INSTDIR"
-  File "C:\gews\sys5\bin\Debug\default.mxd"
   File "C:\gews\sys5\bin\Debug\DefaultUser"
   File "C:\gews\sys5\bin\Debug\Department.hbm.xml"
   File "C:\gews\sys5\bin\Debug\DevExpress.BonusSkins.v14.1.dll"
@@ -363,7 +404,9 @@ Section "瓦斯预警系统管理平台" SEC01
   File "C:\gews\sys5\bin\Debug\系统五关于图片.jpg"
   File "C:\gews\sys5\bin\Debug\综合柱状图.mxd"
   
-    ;write config.ini
+  ;copy the default.mxd file
+  CopyFiles $mxdPath $INSTDIR
+  ;write config.ini
   FileOpen $4 "$INSTDIR\Config.ini" w
   FileWrite $4 "[DataBase]"
   FileWrite $4 "$\r$\n"
@@ -480,10 +523,10 @@ SectionEnd
 
 Section -Post
   WriteUninstaller "$INSTDIR\uninst.exe"
-  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\app.publish\sys5.exe"
+  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\sys5.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\app.publish\sys5.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\sys5.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
@@ -702,7 +745,6 @@ Section Uninstall
   Delete "$INSTDIR\AutoUpdater.NET.pdb"
   Delete "$INSTDIR\AutoUpdater.NET.dll"
   Delete "$INSTDIR\ARConfig.xml"
-  Delete "$INSTDIR\app.publish\sys5.exe"
   Delete "$INSTDIR\Antlr3.Runtime.dll"
 
   Delete "$SMPROGRAMS\瓦斯灾害预警系统\瓦斯预警系统管理平台\Uninstall.lnk"
@@ -727,7 +769,6 @@ Section Uninstall
   RMDir "$INSTDIR\es"
   RMDir "$INSTDIR\de"
   RMDir "$INSTDIR\da"
-  RMDir "$INSTDIR\app.publish"
   RMDir "$INSTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
