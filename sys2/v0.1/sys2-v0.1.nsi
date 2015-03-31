@@ -175,7 +175,7 @@ ShowUnInstDetails show
 
 Section "工作面采掘进度管理系统" SEC01
   SetOutPath "$INSTDIR"
-  SetOverwrite try
+  SetOverwrite on
   File "C:\gews\sys2\bin\Debug\Antlr3.Runtime.dll"
   File "C:\gews\sys2\bin\Debug\ARConfig.xml"
   File "C:\gews\sys2\bin\Debug\Castle.ActiveRecord.dll"

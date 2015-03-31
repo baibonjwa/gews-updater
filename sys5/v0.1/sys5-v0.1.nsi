@@ -169,7 +169,7 @@ ShowUnInstDetails show
 
 Section "瓦斯预警系统管理平台" SEC01
   SetOutPath "$INSTDIR"
-  SetOverwrite try
+  SetOverwrite on
   File "C:\gews\sys5\bin\Debug\Antlr3.Runtime.dll"
   SetOutPath "$INSTDIR"
   File "C:\gews\sys5\bin\Debug\ARConfig.xml"

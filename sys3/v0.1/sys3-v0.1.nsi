@@ -170,7 +170,7 @@ ShowUnInstDetails show
 
 Section "工作面地质测量管理系统" SEC01
   SetOutPath "$INSTDIR"
-  SetOverwrite try
+  SetOverwrite on
   File "C:\gews\sys3\bin\Debug\Antlr3.Runtime.dll"
   CreateDirectory "$SMPROGRAMS\瓦斯灾害预警系统\工作面地质测量管理系统"
   CreateShortCut "$SMPROGRAMS\瓦斯灾害预警系统\工作面地质测量管理系统\工作面地质测量管理系统.lnk" "$INSTDIR\sys3.exe"

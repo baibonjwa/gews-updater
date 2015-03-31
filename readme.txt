@@ -1,16 +1,10 @@
 瓦斯灾害预警系统
 
-提示信息：
 
-工作面瓦斯涌出动态特征管理系统
+发布步骤
 
-
-
-煤科集团沈阳研究院有限公司
-http://www.syccri.com
-
-$PROGRAMFILES\Gews\sys1
-
-C:\path\to\licence\YourSoftwareLicence.txt
-
-瓦斯灾害预警系统/工作面瓦斯涌出动态特征管理系统
+1.建立新版本文件夹
+2.修改.nsi文件的文件（包括，版本号，文件名两处）
+3.重新编译NSIS脚本
+4.修改update.xml
+5.如果有同版本号的修改，以r1、r2等方式追加，并修改update.xml

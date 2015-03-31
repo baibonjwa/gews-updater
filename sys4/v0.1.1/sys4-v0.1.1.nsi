@@ -170,7 +170,7 @@ ShowUnInstDetails show
 
 Section "工作面动态防突管理系统" SEC01
   SetOutPath "$INSTDIR"
-  SetOverwrite try
+  SetOverwrite on
   File "C:\gews\sys4\bin\Debug\Antlr3.Runtime.dll"
   SetOutPath "$INSTDIR\app.publish"
   File "C:\gews\sys4\bin\Debug\app.publish\sys4.exe"
